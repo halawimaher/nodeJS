@@ -40,6 +40,9 @@ function onDataReceived(text) {
   else if(text === 'hello\n'){
     hello();
   }
+  else if(text === 'help\n'){
+    help();
+  }
   else{
     unknownCommand(text);
   }
@@ -78,6 +81,14 @@ function quit(){
   process.exit();
 }
 
-
+/**
+ * Lists all commands
+ *
+ * @returns {void}
+ */
+function help(){
+  console.log('Type \'hello\' to say Hello!')
+  console.log('Type \'quit\' or \'exit\' to see additional commands!')
+}
 // The following line starts the application
 startApp("Maher Halawi")
