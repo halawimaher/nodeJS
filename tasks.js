@@ -37,8 +37,8 @@ function onDataReceived(text) {
   if (text === 'quit\n' || text === 'exit\n') {
     quit();
   }
-  else if(text === 'hello\n'){
-    hello();
+  else if(text === 'hello\n' || text.startsWith('hello ')){
+    hello(text);
   }
   else if(text === 'help\n'){
     help();
@@ -66,10 +66,12 @@ function unknownCommand(c){
  *
  * @returns {void}
  */
-function hello(){
-  console.log('hello!')
-}
-
+function hello(myName){
+    if (myName === 'hello\n'){console.log('hello!')}
+    else{
+      console.log('' + myName.replace("\n", "") + "!")
+    }
+  }
 
 /**
  * Exits the application
@@ -88,6 +90,7 @@ function quit(){
  */
 function help(){
   console.log('Type \'hello\' to say Hello!')
+  console.log('Type hello + your name to say Hello + name')
   console.log('Type \'quit\' or \'exit\' to see additional commands!')
 }
 // The following line starts the application
