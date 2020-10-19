@@ -40,6 +40,21 @@ function onDataReceived(text) {
   else if(text === 'hello\n' || text.startsWith('hello ')){
     hello(text);
   }
+  else if(text === 'list\n'){
+    list();
+  }
+  else if(text === 'add\n'){
+    console.log('Cannot add empty fields');
+  }
+  else if(text.startsWith('add ')){
+    add(text);
+  }
+  else if(text === 'remove\n'){
+    remove(text);
+  }
+  else if(text.startsWith('remove ')){
+    removeSelected(text);
+  }
   else if(text === 'help\n'){
     help();
   }
@@ -72,7 +87,24 @@ function hello(myName){
       console.log('' + myName.replace("\n", "") + "!")
     }
   }
+  var newList = ['Take out the trash',
+                 'Wash the car',
+                 'Clean the dishes',
+                 'Mow the lawn'];
+  function list(){
+    console.log(newList)
+} 
 
+  function add(text){
+    newList.push(text.substring(4).replace("\n", ""));
+}
+  function remove(){
+    newList.pop();
+}
+function removeSelected(text){
+  let num = text.split(' ');
+  newList.splice(num[1]+1, 1);
+}
 /**
  * Exits the application
  *
@@ -90,6 +122,10 @@ function quit(){
  */
 function help(){
   console.log('Type \'hello\' to say Hello!')
+  console.log('Type \'list\' to see to-do list')
+  console.log('Type \'add + "entry"\' to add "entry" to list')
+  console.log('Type \'remove\' to remove first entry from list')
+  console.log('Type \'remove(n)\' to remove "nth" entry from list')
   console.log('Type hello + your name to say Hello + name')
   console.log('Type \'quit\' or \'exit\' to see additional commands!')
 }
