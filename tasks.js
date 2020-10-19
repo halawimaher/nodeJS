@@ -49,11 +49,8 @@ function onDataReceived(text) {
   else if(text.startsWith('add ')){
     add(text);
   }
-  else if(text === 'remove\n'){
+  else if(text === 'remove\n' || text.startsWith('remove ')){
     remove(text);
-  }
-  else if(text.startsWith('remove ')){
-    removeSelected(text);
   }
   else if(text === 'help\n'){
     help();
@@ -98,13 +95,23 @@ function hello(myName){
   function add(text){
     newList.push(text.substring(4).replace("\n", ""));
 }
-  function remove(){
-    newList.pop();
+  function remove(text){
+    text = text.trim();
+    if(text.length == 6){newList.pop()}
+    else{
+      let num = text.split(' ');
+      var c = parseInt(num[1]-1);
+      if(c <= 0 || c >= newList.length){
+        console.log('entry doesn\'t exist')
+      }
+      else{
+      x = newList.splice(c, 1);
+      console.log(newList)
+    }
+  }
+    
 }
-function removeSelected(text){
-  let num = text.split(' ');
-  newList.splice(num[1]+1, 1);
-}
+
 /**
  * Exits the application
  *
