@@ -71,22 +71,37 @@ function onDataReceived(text) {
     unknownCommand(text);
   }
 }
+// json.parse/readfile/try-catch for empty files error
+/*Define global variable*/
+const fs = require('fs');
+let newList;
+let file;
+if(process.argv[2]){
+  file = process.argv[2]
+}
+else{
+  file = 'database.json'
+}
+try {
+    newList = fs.readFileSync(file, 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+  });
+} catch (error) {
+  newList = [];
+}
+if(newList.length > 0){newList = JSON.parse(newList)}
 
-/*Define global variale*/
-var newList = [
-  {"done": false, "name": 'Take out the trash'},
-  {"done": false, "name": 'Wash the car'},
-  {"done": true, "name": 'Clean the dishes'},
-  {"done": true, "name": 'Mow the lawn'}
-];
-for(let i=0; i <newList.length; i++){
-  if(newList[i].done == true){
-    newList[i].done = '[✓]'
-  }
-  else{
-    newList[i].done = '[ ]'
-  }
-  }
+
+// for(let i=0; i <newList.length; i++){
+//   if(newList[i].done == true){
+//     newList[i].done = '[✓]'
+//   }
+//   else{
+//     newList[i].done = '[ ]'
+//   }
+// }
 
 /**
  * prints "unknown command"
@@ -113,13 +128,18 @@ function hello(myName){
   }
 
 function list(newList){
+  if(newList.length == 0){
+    console.log("No tasks to show")
+    return
+  }
   for(let i=0; i <newList.length; i++){
+    if(newList[i].done == false){newList[i].done = '[ ]'}
     console.log(newList[i].done, newList[i].name)
   }
 }
 
 function add(text){
-  let b = {"done": false, "name": text.replace('add ', "")}
+  let b = {"done": false, "name": text.replace('add ', "").trim()}
   newList.push(b);
 }
 
@@ -213,16 +233,13 @@ function edit(text){
  *
  * @returns {void}
  */
-const fs = require('fs');
 function quit(){
-  fs.writeFile('database.json', JSON.stringify(newList, null, 1) ,'utf8', function (err) {
+  fs.writeFile(file, JSON.stringify(newList, null, 1) ,'utf8', function (err) {
     if (err) throw err;
     console.log('\x1b[36m Saving and Quitting now, goodbye!', "\x1b[0m")
     process.exit();
   });
-  
 }
-
 
 /**
  * Lists all commands
