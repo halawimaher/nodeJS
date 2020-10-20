@@ -61,6 +61,9 @@ function onDataReceived(text) {
   else if(text === 'remove\n' || text.startsWith('remove ')){
     remove(text);
   }
+  else if(text === "load\n"){
+    load();
+  }
   else if(text === 'help\n'){
     help();
   }
@@ -129,6 +132,10 @@ function check(text){
     let y = parseInt(v[1])
     tempList = newList
     let checker = tempList[0].done
+    if(y > newList.length){
+      console.log("error")
+      return
+    }
     if(checker = '[ ]'){newList[y-1].done = '[✓]'}
     else{console.log("You're already done with that one!")}
   }
@@ -141,11 +148,15 @@ function unCheck(text){
   else{
     let v = text.split(" ")
     let y = parseInt(v[1])
-    let checker = newList[y].done
+    if(y > newList.length){
+      console.log("error")
+      return
+    }
+    let checker = newList[y-1].done
     if(checker = '[✓]'){newList[y-1].done = '[ ]'}
     else{console.log("Nothing to do. Get a move on")} 
-  }
-}
+  }}
+
 
 function remove(text){
   text = text.trim();
@@ -202,10 +213,16 @@ function edit(text){
  *
  * @returns {void}
  */
+const fs = require('fs');
 function quit(){
-  console.log('Quitting now, goodbye!')
-  process.exit();
+  fs.writeFile('database.json', JSON.stringify(newList, null, 1) ,'utf8', function (err) {
+    if (err) throw err;
+    console.log('\x1b[36m Saving and Quitting now, goodbye!', "\x1b[0m")
+    process.exit();
+  });
+  
 }
+
 
 /**
  * Lists all commands
