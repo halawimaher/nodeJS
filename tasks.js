@@ -41,7 +41,7 @@ function onDataReceived(text) {
     hello(text);
   }
   else if(text === 'list\n'){
-    list();
+    list(newList);
   }
   else if(text === 'edit\n' || text.startsWith('edit')){
     edit(text);
@@ -87,16 +87,28 @@ function hello(myName){
       console.log('' + myName.replace("\n", "") + "!")
     }
   }
-  var newList = ['Take out the trash',
-                 'Wash the car',
-                 'Clean the dishes',
-                 'Mow the lawn'];
-  function list(){
-    console.log(newList)
+  var newList = [
+                  {"done": false, "name": 'Take out the trash'},
+                  {"done": false, "name": 'Wash the car'},
+                  {"done": false, "name": 'Clean the dishes'},
+                  {"done": false, "name": 'Mow the lawn'}
+                ];
+
+  function list(newList){
+    for(let i=0; i <newList.length; i++){
+      if(newList[i].done == true){
+        newList[i].done = '[✓]'
+      }
+      else{
+        newList[i].done = '[ ]'
+      }
+      console.log(newList[i].done, newList[i].name)
+    }
 } 
 
   function add(text){
-    newList.push(text.substring(4).replace("\n", ""));
+    let b = {"done": false, "name": text.replace('add ', "")}
+    newList.push(b);
 }
   function remove(text){
     text = text.trim();
@@ -109,7 +121,15 @@ function hello(myName){
       }
       else{
       x = newList.splice(c, 1);
-      console.log(newList)
+      for(let i=0; i <newList.length; i++){
+        if(newList[i].done == true){
+          newList[i].done = '[✓]'
+        }
+        else{
+          newList[i].done = '[ ]'
+        }
+        console.log(newList[i].done, newList[i].name)
+      }
     }
   }  
 }
@@ -118,19 +138,24 @@ function edit(text){
   let test = text.split(" ");
   test.shift();
   let a = test[0];
-  let c = newList.length;
   if (text === "edit\n"){
     console.log("Error, type \'help\' for additional commands");
   }
   else{
     let final = test.join(" ").replace("\n","")
-    if(isNaN(a)){newList[c-1] = final}
+    if(isNaN(a)){
+      let b = {"done": false, "name": text.replace('edit ', "")}
+      newList.pop()
+      newList.push(b)
+    }
     else{
       let b = parseInt(a)
-      let final2 = final.split(" ");
-      final2.shift();
-      final3 = final2.join(" ")
-      newList[b-1] = final3;
+      let temp = final.split(" ")
+      temp2 = temp.shift();
+      temp = temp.join(" ")
+      console.log(temp)
+      let final2 = {"done": false, "name": temp};
+      newList[b-1] = final2;
     }
   }
 
