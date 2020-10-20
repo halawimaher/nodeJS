@@ -43,6 +43,9 @@ function onDataReceived(text) {
   else if(text === 'list\n'){
     list();
   }
+  else if(text === 'edit\n' || text.startsWith('edit')){
+    edit(text);
+  }
   else if(text === 'add\n'){
     console.log('Cannot add empty fields');
   }
@@ -101,15 +104,36 @@ function hello(myName){
     else{
       let num = text.split(' ');
       var c = parseInt(num[1]-1);
-      if(c <= 0 || c >= newList.length){
+      if(c < 0 || c >= newList.length){
         console.log('entry doesn\'t exist')
       }
       else{
       x = newList.splice(c, 1);
       console.log(newList)
     }
+  }  
+}
+
+function edit(text){
+  let test = text.split(" ");
+  test.shift();
+  let a = test[0];
+  let c = newList.length;
+  if (text === "edit\n"){
+    console.log("Error, type \'help\' for additional commands");
   }
-    
+  else{
+    let final = test.join(" ").replace("\n","")
+    if(isNaN(a)){newList[c-1] = final}
+    else{
+      let b = parseInt(a)
+      let final2 = final.split(" ");
+      final2.shift();
+      final3 = final2.join(" ")
+      newList[b-1] = final3;
+    }
+  }
+
 }
 
 /**
@@ -135,6 +159,8 @@ function help(){
   console.log('Type \'remove(n)\' to remove "nth" entry from list')
   console.log('Type hello + your name to say Hello + name')
   console.log('Type \'quit\' or \'exit\' to see additional commands!')
+  console.log('Type \'edit name_of_task\' to replace last task with name_of_task!')
+  console.log('Type \'edit 2 name_of_task\' to replace second task with name_of_task!')
 }
 // The following line starts the application
 startApp("Maher Halawi")
