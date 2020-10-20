@@ -49,6 +49,12 @@ function onDataReceived(text) {
   else if(text === 'add\n'){
     console.log('Cannot add empty fields');
   }
+  else if(text === 'check\n' || text.startsWith('check ')){
+    check(text);
+  }
+  else if(text === 'uncheck\n' || text.startsWith('uncheck ')){
+    unCheck(text);
+  }
   else if(text.startsWith('add ')){
     add(text);
   }
@@ -63,6 +69,21 @@ function onDataReceived(text) {
   }
 }
 
+/*Define global variale*/
+var newList = [
+  {"done": false, "name": 'Take out the trash'},
+  {"done": false, "name": 'Wash the car'},
+  {"done": true, "name": 'Clean the dishes'},
+  {"done": true, "name": 'Mow the lawn'}
+];
+for(let i=0; i <newList.length; i++){
+  if(newList[i].done == true){
+    newList[i].done = '[✓]'
+  }
+  else{
+    newList[i].done = '[ ]'
+  }
+  }
 
 /**
  * prints "unknown command"
@@ -87,14 +108,56 @@ function hello(myName){
       console.log('' + myName.replace("\n", "") + "!")
     }
   }
-  var newList = [
-                  {"done": false, "name": 'Take out the trash'},
-                  {"done": false, "name": 'Wash the car'},
-                  {"done": false, "name": 'Clean the dishes'},
-                  {"done": false, "name": 'Mow the lawn'}
-                ];
 
-  function list(newList){
+function list(newList){
+  for(let i=0; i <newList.length; i++){
+    console.log(newList[i].done, newList[i].name)
+  }
+}
+
+function add(text){
+  let b = {"done": false, "name": text.replace('add ', "")}
+  newList.push(b);
+}
+
+function check(text){
+  if(text === 'check\n'){
+    console.log("Error. Please specify task number to mark as checked!")
+  }
+  else{
+    let v = text.split(" ")
+    let y = parseInt(v[1])
+    tempList = newList
+    let checker = tempList[0].done
+    if(checker = '[ ]'){newList[y-1].done = '[✓]'}
+    else{console.log("You're already done with that one!")}
+  }
+}
+
+function unCheck(text){
+  if(text === 'uncheck\n'){
+    console.log("Error. Please specify task number to mark as unchecked!")
+  }
+  else{
+    let v = text.split(" ")
+    let y = parseInt(v[1])
+    let checker = newList[y].done
+    if(checker = '[✓]'){newList[y-1].done = '[ ]'}
+    else{console.log("Nothing to do. Get a move on")} 
+  }
+}
+
+function remove(text){
+  text = text.trim();
+  if(text.length == 6){newList.pop()}
+  else{
+    let num = text.split(' ');
+    var c = parseInt(num[1]-1);
+    if(c < 0 || c >= newList.length){
+      console.log('entry doesn\'t exist')
+    }
+    else{
+    x = newList.splice(c, 1);
     for(let i=0; i <newList.length; i++){
       if(newList[i].done == true){
         newList[i].done = '[✓]'
@@ -104,34 +167,8 @@ function hello(myName){
       }
       console.log(newList[i].done, newList[i].name)
     }
-} 
-
-  function add(text){
-    let b = {"done": false, "name": text.replace('add ', "")}
-    newList.push(b);
-}
-  function remove(text){
-    text = text.trim();
-    if(text.length == 6){newList.pop()}
-    else{
-      let num = text.split(' ');
-      var c = parseInt(num[1]-1);
-      if(c < 0 || c >= newList.length){
-        console.log('entry doesn\'t exist')
-      }
-      else{
-      x = newList.splice(c, 1);
-      for(let i=0; i <newList.length; i++){
-        if(newList[i].done == true){
-          newList[i].done = '[✓]'
-        }
-        else{
-          newList[i].done = '[ ]'
-        }
-        console.log(newList[i].done, newList[i].name)
-      }
     }
-  }  
+ }  
 }
 
 function edit(text){
@@ -153,7 +190,6 @@ function edit(text){
       let temp = final.split(" ")
       temp2 = temp.shift();
       temp = temp.join(" ")
-      console.log(temp)
       let final2 = {"done": false, "name": temp};
       newList[b-1] = final2;
     }
@@ -178,14 +214,16 @@ function quit(){
  */
 function help(){
   console.log('Type \'hello\' to say Hello!')
+  console.log('Type hello + your name to say Hello + name')
   console.log('Type \'list\' to see to-do list')
   console.log('Type \'add + "entry"\' to add "entry" to list')
   console.log('Type \'remove\' to remove first entry from list')
   console.log('Type \'remove(n)\' to remove "nth" entry from list')
-  console.log('Type hello + your name to say Hello + name')
   console.log('Type \'quit\' or \'exit\' to see additional commands!')
   console.log('Type \'edit name_of_task\' to replace last task with name_of_task!')
   console.log('Type \'edit 2 name_of_task\' to replace second task with name_of_task!')
+  console.log('Type check 2 to mark second task as complete!')
+  console.log('Type uncheck 3 to mark third task as incomplete!')
 }
 // The following line starts the application
 startApp("Maher Halawi")
