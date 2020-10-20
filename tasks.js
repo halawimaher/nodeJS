@@ -67,10 +67,14 @@ function onDataReceived(text) {
   else if(text === 'help\n'){
     help();
   }
+  else if(text === 'clear\n'){
+    clear();
+  }
   else{
     unknownCommand(text);
   }
 }
+const { clear } = require('console');
 // json.parse/readfile/try-catch for empty files error
 /*Define global variable*/
 const fs = require('fs');
@@ -127,6 +131,11 @@ function hello(myName){
     }
   }
 
+/**
+ * Lists current tasks.
+ *
+ * @returns {void}
+ */
 function list(newList){
   if(newList.length == 0){
     console.log("No tasks to show")
@@ -136,13 +145,25 @@ function list(newList){
     if(newList[i].done == false){newList[i].done = '[ ]'}
     console.log(newList[i].done, newList[i].name)
   }
+  console.log("Type check/uncheck number_of_task to mark as complete/incomplete")
 }
 
+/**
+ * Add tasks.
+ *
+ * @returns {void}
+ */
 function add(text){
   let b = {"done": false, "name": text.replace('add ', "").trim()}
   newList.push(b);
+  console.log("New task added. Type \'list\' to see your tasks.")
 }
 
+/**
+ * Marks tasks as complete.
+ *
+ * @returns {void}
+ */
 function check(text){
   if(text === 'check\n'){
     console.log("Error. Please specify task number to mark as checked!")
@@ -156,11 +177,19 @@ function check(text){
       console.log("error")
       return
     }
-    if(checker = '[ ]'){newList[y-1].done = '[✓]'}
+    if(checker = '[ ]'){
+      newList[y-1].done = '[✓]';
+      console.log("Task " + y + " marked as complete!")
+    }
     else{console.log("You're already done with that one!")}
   }
 }
 
+/**
+ * Marks tasks as incomplete.
+ *
+ * @returns {void}
+ */
 function unCheck(text){
   if(text === 'uncheck\n'){
     console.log("Error. Please specify task number to mark as unchecked!")
@@ -173,11 +202,15 @@ function unCheck(text){
       return
     }
     let checker = newList[y-1].done
-    if(checker = '[✓]'){newList[y-1].done = '[ ]'}
+    if(checker = '[✓]'){newList[y-1].done = '[ ]', console.log("Task " + y + " marked as Incomplete!")}
     else{console.log("Nothing to do. Get a move on")} 
   }}
 
-
+/**
+ * Deletes from the tasks list.
+ *
+ * @returns {void}
+ */
 function remove(text){
   text = text.trim();
   if(text.length == 6){newList.pop()}
@@ -202,6 +235,11 @@ function remove(text){
  }  
 }
 
+/**
+ * Edits the task list.
+ *
+ * @returns {void}
+ */
 function edit(text){
   let test = text.split(" ");
   test.shift();
@@ -225,8 +263,9 @@ function edit(text){
       newList[b-1] = final2;
     }
   }
-
 }
+
+
 
 /**
  * Exits the application
